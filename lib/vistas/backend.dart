@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:typed_data';
 
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 ////////////////////////////// subir nombre repositorio
 Future<void> guardarNombreRepositorio(
@@ -41,11 +41,15 @@ Future<void> guardarNombreRepositorio(
         firebase_storage.Reference storageRef = firebase_storage
             .FirebaseStorage.instance
             .ref()
-            .child('images/$nuevoID');
+            .child('images/$nuevoID.jpg');
 
-        await storageRef.putData(imageBytes);
+        firebase_storage.UploadTask uploadTask =
+            storageRef.putData(imageBytes);
 
-        String downloadURL = await storageRef.getDownloadURL();
+        firebase_storage.TaskSnapshot taskSnapshot =
+            await uploadTask.whenComplete(() => null);
+
+        String downloadURL = await taskSnapshot.ref.getDownloadURL();
 
         await newRepoRef.set(
           {
@@ -69,14 +73,12 @@ Future<void> guardarNombreRepositorio(
 
 ////////////subir imagen
 Future<Uint8List?> seleccionarImagen() async {
-  FilePickerResult? result = await FilePicker.platform.pickFiles(
-    type: FileType.custom,
-    allowedExtensions: ['jpg', 'jpeg', 'png'],
-  );
+  final picker = ImagePicker();
+  XFile? pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
-  if (result != null) {
-    PlatformFile file = result.files.first;
-    return file.bytes;
+  if (pickedFile != null) {
+    Uint8List? imageBytes = await pickedFile.readAsBytes();
+    return imageBytes;
   }
 
   return null;
