@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "269823945315",
+    "project_id": "learns-c86ea",
+    "storage_bucket": "learns-c86ea.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:269823945315:android:ed8669747381a3aa65e656",
+        "android_client_info": {
+          "package_name": "com.codigocorrecto.espoch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "269823945315-1u8rnfvc9n8cl2v5l271838606gb8a8t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBz5dgq5or_8F2cDekAVXrF4MEqihsb7lc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "269823945315-1u8rnfvc9n8cl2v5l271838606gb8a8t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
