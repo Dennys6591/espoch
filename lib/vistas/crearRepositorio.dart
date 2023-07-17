@@ -179,7 +179,7 @@ class _CrearRepositorioState extends State<CrearRepositorio> {
                 onPressed: () {
                   guardarNombreRepositorio(_controllerNombreRecurso, context);
                 },
-                child: Text('Guardar nombre del repositorio'),
+                child: Text('Guardar repositorio'),
               ),
             ],
           ),
