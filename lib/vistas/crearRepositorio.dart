@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
 import 'backend.dart';
+import 'UpLoadLogic.dart';
 
 class CrearRepositorio extends StatefulWidget {
   const CrearRepositorio({Key? key}) : super(key: key);
@@ -158,6 +159,10 @@ class _CrearRepositorioState extends State<CrearRepositorio> {
                     ),
                     onPressed: () {
                       // Acción al hacer clic en el botón
+                       Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SubirPDF()),
+              );
                     },
                     child: Text('Agregar objeto de aprendizaje'),
                   ),
