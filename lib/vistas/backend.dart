@@ -1,9 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:async';
+import 'dart:convert';
 import 'dart:typed_data';
-
+import 'package:universal_html/html.dart' as html;
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 
 ////////////////////////////// subir nombre repositorio
 Future<void> guardarNombreRepositorio(
@@ -43,13 +44,9 @@ Future<void> guardarNombreRepositorio(
             .ref()
             .child('images/$nuevoID.jpg');
 
-        firebase_storage.UploadTask uploadTask =
-            storageRef.putData(imageBytes);
+        await storageRef.putData(imageBytes);
 
-        firebase_storage.TaskSnapshot taskSnapshot =
-            await uploadTask.whenComplete(() => null);
-
-        String downloadURL = await taskSnapshot.ref.getDownloadURL();
+        String downloadURL = await storageRef.getDownloadURL();
 
         await newRepoRef.set(
           {
@@ -60,6 +57,22 @@ Future<void> guardarNombreRepositorio(
 
         print('URL de la imagen guardado en Firestore');
         Navigator.pop(context);
+
+        // Mostrar la imagen en una pantalla flotante
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            content: Image.network(downloadURL),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Cerrar'),
+              ),
+            ],
+          ),
+        );
       } catch (e) {
         print('Error al subir la imagen: $e');
       }
@@ -73,13 +86,31 @@ Future<void> guardarNombreRepositorio(
 
 ////////////subir imagen
 Future<Uint8List?> seleccionarImagen() async {
-  final picker = ImagePicker();
-  XFile? pickedFile = await picker.pickImage(source: ImageSource.gallery);
+  final completer = Completer<Uint8List?>();
 
-  if (pickedFile != null) {
-    Uint8List? imageBytes = await pickedFile.readAsBytes();
-    return imageBytes;
-  }
+  html.FileUploadInputElement uploadInput = html.FileUploadInputElement();
+  uploadInput.accept = 'image/*';
+  uploadInput.click();
 
-  return null;
+  uploadInput.onChange.listen((e) {
+    if (uploadInput.files!.isNotEmpty) {
+      final reader = html.FileReader();
+      reader.readAsDataUrl(uploadInput.files![0]);
+      reader.onError.listen((error) => completer.completeError(error));
+      reader.onLoad.first.then((_) {
+        final encoded = reader.result as String;
+        final stripped =
+            encoded.replaceFirst(RegExp(r'data:image/[^;]+;base64,'), '');
+        if (stripped.isNotEmpty) {
+          completer.complete(Uint8List.fromList(base64.decode(stripped)));
+        } else {
+          completer.completeError('Error al leer la imagen');
+        }
+      });
+    } else {
+      completer.complete(null);
+    }
+  });
+
+  return completer.future;
 }
