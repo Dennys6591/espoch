@@ -5,6 +5,10 @@ import 'package:universal_html/html.dart' as html;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
+import 'dart:typed_data';
+import 'package:flutter/material.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:file_picker/file_picker.dart';
 
 ////////////////////////////// subir nombre repositorio
 Future<void> guardarNombreRepositorio(
@@ -44,7 +48,10 @@ Future<void> guardarNombreRepositorio(
             .ref()
             .child('images/$nuevoID.jpg');
 
-        await storageRef.putData(imageBytes);
+        final metadata = SettableMetadata(contentType: 'image/jpeg');
+
+        // Subimos el archivo utilizando putData() y pasamos los bytes del PDF junto con la metadata
+        await storageRef.putData(imageBytes, metadata);
 
         String downloadURL = await storageRef.getDownloadURL();
 
