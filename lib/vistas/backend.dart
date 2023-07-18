@@ -9,6 +9,62 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:file_picker/file_picker.dart';
+import 'UpLoadLogic.dart';
+
+TextEditingController _fileNameController = TextEditingController();
+SubirPDF ObjPdf = SubirPDF();
+String urlPdf = '';
+late var downloadURLpdf;
+Uint8List? _pdfBytes;
+var urlPDF = '';
+////////////////Elegir un pfd////////////////
+Future<void> Escoger_PDF() async {
+  FilePickerResult? result = await FilePicker.platform.pickFiles(
+    type: FileType.custom,
+    allowedExtensions: ['pdf'],
+  );
+
+  if (result != null) {
+    _pdfBytes = result.files.single.bytes;
+  } else {
+    print('El usuario canceló la operación...');
+  }
+}
+
+////////////////Subir el pdf a storage////////////////
+void Subir_PDF(
+    TextEditingController nombre_archivo, BuildContext context) async {
+  if (_pdfBytes == null) {
+    print('Ningún archivo seleccionado.');
+    //return;
+  }
+
+  String fileName = nombre_archivo.text.trim();
+  if (fileName.isEmpty) {
+    print('Ingrese un nombre para el archivo.');
+    // return;
+  }
+
+  try {
+    // Obtenemos la referencia al archivo en Firebase Storage
+    final storageRef =
+        FirebaseStorage.instance.ref().child('pdfs').child(fileName + '.pdf');
+
+    // Creamos un objeto SettableMetadata para especificar el tipo de contenido
+    final metadata = SettableMetadata(contentType: 'application/pdf');
+
+    // Subimos el archivo utilizando putData() y pasamos los bytes del PDF junto con la metadata
+    await storageRef.putData(_pdfBytes!, metadata);
+    // Obtenemos la URL de descarga del archivo
+    downloadURLpdf = await storageRef.getDownloadURL();
+    print('URL de descarga del archivo: $downloadURLpdf');
+    // await guardarURLenFirestore(fileName, downloadURLpdf);
+    // url_PDF(downloadURLpdf); //
+    print('Archivo subido con éxito.');
+  } catch (e) {
+    print('Error al subir el archivo: $e');
+  }
+}
 
 ////////////////////////////// subir nombre repositorio
 Future<void> guardarNombreRepositorio(
@@ -40,6 +96,7 @@ Future<void> guardarNombreRepositorio(
     print('Nombre del repositorio guardado en Firestore con ID: $nuevoID');
 
     // Subir la imagen y guardar la URL en Firestore
+
     Uint8List? imageBytes = await seleccionarImagen();
     if (imageBytes != null) {
       try {
@@ -58,11 +115,13 @@ Future<void> guardarNombreRepositorio(
         await newRepoRef.set(
           {
             'urlImagen': downloadURL,
+            'url_PDF': downloadURLpdf,
           },
           SetOptions(merge: true),
         );
 
         print('URL de la imagen guardado en Firestore');
+
         Navigator.pop(context);
 
         // Mostrar la imagen en una pantalla flotante

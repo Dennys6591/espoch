@@ -1,6 +1,6 @@
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:espoch/vistas/repositorio.dart';
 import 'package:espoch/vistas/reutilizables.dart';
@@ -9,7 +9,6 @@ class InicioPage extends StatefulWidget {
   const InicioPage({Key? key}) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
   _InicioPageState createState() => _InicioPageState();
 }
 
@@ -17,9 +16,9 @@ class _InicioPageState extends State<InicioPage> {
   late PageController _pageController;
   int _currentPage = 0;
   final List<Widget> _pageItems = [];
-  
-  double containerHeight = 250.0; 
-  
+
+  double containerHeight = 250.0;
+
   // Cantidad de recursos que deseas mostrar
   @override
   void initState() {
@@ -39,108 +38,66 @@ class _InicioPageState extends State<InicioPage> {
     super.didChangeDependencies();
   }
 
-///// se crean los repositorios aleatorios
+  // Modifica la función _buildPageItems para obtener datos desde Firebase
   Widget _buildPageItems() {
-    const int itemsPerPage = 6; // Cantidad de contenedores por página
-    const int totalItems = 15; // Total de contenedores en tu lista
-   
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance.collection('repositorios').snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const CircularProgressIndicator();
+        }
 
-    List<Widget> pageItems = [];
+        final data = snapshot.data!.docs;
+        List<Widget> page = [];
 
-    for (int i = 0; i < totalItems; i += itemsPerPage) {
-      List<Widget> page = [];
+        for (var doc in data) {
+          Map<String, dynamic> repoData = doc.data() as Map<String, dynamic>;
+          String nombre = repoData['nombre'];
 
-      for (int j = i; j < i + itemsPerPage; j++) {
-        if (j < totalItems) {
-          Color randomColor = const Color.fromARGB(255, 149, 148, 148);
+          String? urlImagen = repoData['urlImagen'];
 
-          page.add(
+          if (urlImagen != null) {
+            page.add(
               GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const repositoriosScreem(),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const repositoriosScreem(),
+                    ),
+                  );
+                },
+                child: Container(
+                  color: Colors.grey[300], // Puedes personalizar el color
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Image.network(
+                        urlImagen,
+                        fit: BoxFit.cover,
+                      ),
+                      const SizedBox(height: 8.0),
+                      AutoSizeText(
+                        nombre,
+                        style: const TextStyle(
+                            fontSize: 12.0, color: Colors.black),
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
                   ),
-                );
-              },
-            child:Container(
-              color: randomColor,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Image.asset(
-                      'assets/images/logo.png',
-                      fit: BoxFit.cover,
-                    ),
-                    const SizedBox(height: 8.0),
-                    const Text(
-                      'Nombre del recurso',
-                      style: TextStyle(fontSize: 12.0, color: Colors.white),
-                      textAlign: TextAlign.center,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
                 ),
               ),
-            ),
-          );
+            );
+          }
         }
-      }
 
-      pageItems.add(
-        ListView(
+        return ListView(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           children: page,
-        ),
-      );
-    }
-
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final double maxWidth = constraints.maxWidth;
-        final bool isMobile = maxWidth < 400;
-////version mobil
-        if (isMobile) {
-          return ListView.separated(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            itemCount: pageItems.length,
-            separatorBuilder: (context, index) => const SizedBox(height: 8.0),
-            itemBuilder: (context, index) {
-              return pageItems[index];
-            },
-          );
-        } else {
-// Versión para web
-          int columns = (maxWidth / 200)
-              .floor(); // Ajusta el número de columnas según tus necesidades
-          double spacing = 8.0; // Espacio entre los contenedores
-          double containerWidth =
-              (maxWidth - (columns - 1) * spacing) / columns;
-          double containerHeight =
-              250.0; // Ajusta la altura máxima de los contenedores según tus necesidades
-         
-          return GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent:
-                  500, // Ajusta el ancho máximo de cada contenedor
-              mainAxisExtent:
-                  containerHeight, // Ajusta la altura máxima de cada contenedor
-              mainAxisSpacing: spacing,
-              crossAxisSpacing: spacing,
-              childAspectRatio: containerWidth /
-                  containerHeight, // Ajusta la relación de aspecto según tus necesidades
-            ),
-            itemCount: pageItems.length,
-            itemBuilder: (context, index) {
-              return pageItems[index];
-            },
-          );
-        }
+        );
       },
     );
   }
@@ -196,7 +153,7 @@ class _InicioPageState extends State<InicioPage> {
               ),
             ),
             const SizedBox(height: 5),
-      
+
             ////aqui se ponen los repositorios ahora esta solo creandose aleatoriamente pero deberia ir con una base de datos
             Expanded(
               child: PageView(
@@ -214,14 +171,13 @@ class _InicioPageState extends State<InicioPage> {
         ),
       ),
 
-  ////footer
+      ////footer
       bottomNavigationBar: MyBottomNavigationBar(),
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Padding(
-            padding:
-                const EdgeInsets.only(left: 10.0), // Ajusta el espaciado aquí
+            padding: const EdgeInsets.only(left: 10.0),
             child: IconButton(
               onPressed: _previousPage,
               icon: const Icon(Icons.arrow_back),
