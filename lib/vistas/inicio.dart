@@ -145,25 +145,26 @@ class _InicioPageState extends State<InicioPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppBar(),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: <Widget>[
-            const SizedBox(height: 10),
-            const Align(
-              alignment: Alignment.topLeft,
-              child: Text(
-                'Recursos más populares',
-                style: TextStyle(fontSize: 18),
-              ),
-            ),
-            const SizedBox(height: 5),
-            Expanded(
-              child: _buildPageItems(),
-            ),
-          ],
+     body: Padding(
+  padding: const EdgeInsets.all(8.0),
+  child: SingleChildScrollView(
+    child: Column(
+      children: <Widget>[
+        const SizedBox(height: 10),
+        const Align(
+          alignment: Alignment.topLeft,
+          child: Text(
+            'Recursos más populares',
+            style: TextStyle(fontSize: 18),
+          ),
         ),
-      ),
+        const SizedBox(height: 5),
+        _buildPageItems(),
+      ],
+    ),
+  ),
+),
+
       bottomNavigationBar: MyBottomNavigationBar(),
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
