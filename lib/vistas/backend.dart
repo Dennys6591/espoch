@@ -125,20 +125,20 @@ Future<void> guardarNombreRepositorio(
         Navigator.pop(context);
 
         // Mostrar la imagen en una pantalla flotante
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            content: Image.network(downloadURL),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text('Cerrar'),
-              ),
-            ],
-          ),
-        );
+      showDialog(
+  context: context,
+  builder: (context) => AlertDialog(
+    content: Image.memory(imageBytes),
+    actions: [
+      TextButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        child: Text('Cerrar'),
+      ),
+    ],
+  ),
+);
       } catch (e) {
         print('Error al subir la imagen: $e');
       }

@@ -180,7 +180,7 @@ class _CrearRepositorioState extends State<CrearRepositorio> {
                   guardarNombreRepositorio(_controllerNombreRecurso, context);
                    //Subir_PDF(_fileNameController, context);
                 },
-                child: Text('Guardar nombre del repositorio'),
+                child: Text('Guardar repositorio'),
               ),
             ],
           ),
