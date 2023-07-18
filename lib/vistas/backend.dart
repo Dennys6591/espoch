@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
+import 'package:image_picker/image_picker.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -10,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:file_picker/file_picker.dart';
 import 'UpLoadLogic.dart';
-
+import 'package:flutter/foundation.dart' show kIsWeb;
 TextEditingController _fileNameController = TextEditingController();
 SubirPDF ObjPdf = SubirPDF();
 String urlPdf = '';
@@ -61,6 +62,7 @@ void Subir_PDF(
     // await guardarURLenFirestore(fileName, downloadURLpdf);
     // url_PDF(downloadURLpdf); //
     print('Archivo subido con éxito.');
+     Navigator.pop(context);
   } catch (e) {
     print('Error al subir el archivo: $e');
   }
@@ -154,29 +156,42 @@ Future<void> guardarNombreRepositorio(
 Future<Uint8List?> seleccionarImagen() async {
   final completer = Completer<Uint8List?>();
 
-  html.FileUploadInputElement uploadInput = html.FileUploadInputElement();
-  uploadInput.accept = 'image/*';
-  uploadInput.click();
+  if (kIsWeb) {
+    html.FileUploadInputElement uploadInput = html.FileUploadInputElement();
+    uploadInput.accept = 'image/*';
+    uploadInput.click();
 
-  uploadInput.onChange.listen((e) {
-    if (uploadInput.files!.isNotEmpty) {
-      final reader = html.FileReader();
-      reader.readAsDataUrl(uploadInput.files![0]);
-      reader.onError.listen((error) => completer.completeError(error));
-      reader.onLoad.first.then((_) {
-        final encoded = reader.result as String;
-        final stripped =
-            encoded.replaceFirst(RegExp(r'data:image/[^;]+;base64,'), '');
-        if (stripped.isNotEmpty) {
-          completer.complete(Uint8List.fromList(base64.decode(stripped)));
-        } else {
-          completer.completeError('Error al leer la imagen');
-        }
-      });
+    uploadInput.onChange.listen((e) {
+      if (uploadInput.files!.isNotEmpty) {
+        final reader = html.FileReader();
+        reader.readAsDataUrl(uploadInput.files![0]);
+        reader.onError.listen((error) => completer.completeError(error));
+        reader.onLoad.first.then((_) {
+          final encoded = reader.result as String;
+          final stripped =
+              encoded.replaceFirst(RegExp(r'data:image/[^;]+;base64,'), '');
+          if (stripped.isNotEmpty) {
+            completer.complete(Uint8List.fromList(base64.decode(stripped)));
+          } else {
+            completer.completeError('Error al leer la imagen');
+          }
+        });
+      } else {
+        completer.complete(null);
+      }
+    });
+  } else {
+    ///mobil
+    final imagePicker = ImagePicker();
+    final pickedImage = await imagePicker.pickImage(source: ImageSource.gallery);
+
+    if (pickedImage != null) {
+      final imageBytes = await pickedImage.readAsBytes();
+      completer.complete(imageBytes);
     } else {
       completer.complete(null);
     }
-  });
+  }
 
   return completer.future;
 }
