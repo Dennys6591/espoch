@@ -91,7 +91,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                   20.0), // Ajusta el radio de borde según sea necesario
             ),
             child: const Text('Recursos\ninstitucionales',
-                style: TextStyle(fontSize: 10.0, color: Colors.white)),
+                style: TextStyle(fontSize: 9.0, color: Colors.white)),
           ),
         ),
         Flexible(
@@ -123,7 +123,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
               Text(
                 'Iniciar\nsesión',
                 style: TextStyle(
-                  fontSize: 12.0,
+                  fontSize: 9.0,
                   color: Colors.white,
                 ),
               ),
@@ -146,37 +146,39 @@ class MyBottomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 70.0,
+      height: 85.0,
       color: Colors.grey,
       child: const Padding(
         padding: EdgeInsets.all(5.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Align(
-              alignment: Alignment.center,
-              child: Text(
-                'Escuela Superior Politécnica de Chimborazo 2023\n',
-                style: TextStyle(fontSize: 10.0, color: Colors.white),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Align(
+                alignment: Alignment.center,
+                child: Text(
+                  'Escuela Superior Politécnica de Chimborazo 2023\n',
+                  style: TextStyle(fontSize: 10.0, color: Colors.white),
+                ),
               ),
-            ),
-            Text(
-              '    Dirección: Panamericana sur km 1 1/2. Riobamba-Ecuador',
-              style: TextStyle(fontSize: 8.0, color: Colors.white),
-            ),
-            Text(
-              '    Teléfono: 593(03) 2998-200',
-              style: TextStyle(fontSize: 8.0, color: Colors.white),
-            ),
-            Text(
-              '    Telefax: (03)2317-001',
-              style: TextStyle(fontSize: 8.0, color: Colors.white),
-            ),
-            Text(
-              '    Código Postal: EC060155',
-              style: TextStyle(fontSize: 8.0, color: Colors.white),
-            ),
-          ],
+              Text(
+                '    Dirección: Panamericana sur km 1 1/2. Riobamba-Ecuador',
+                style: TextStyle(fontSize: 8.0, color: Colors.white),
+              ),
+              Text(
+                '    Teléfono: 593(03) 2998-200',
+                style: TextStyle(fontSize: 8.0, color: Colors.white),
+              ),
+              Text(
+                '    Telefax: (03)2317-001',
+                style: TextStyle(fontSize: 8.0, color: Colors.white),
+              ),
+              Text(
+                '    Código Postal: EC060155',
+                style: TextStyle(fontSize: 8.0, color: Colors.white),
+              ),
+            ],
+          ),
         ),
       ),
     );

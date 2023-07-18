@@ -181,7 +181,7 @@ Future<Uint8List?> seleccionarImagen() async {
       }
     });
   } else {
-    ///mobil
+ // Dispositivo móvil
     final imagePicker = ImagePicker();
     final pickedImage = await imagePicker.pickImage(source: ImageSource.gallery);
 
