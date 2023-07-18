@@ -1,6 +1,10 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/widgets.dart';
 
 import 'package:espoch/vistas/repositorio.dart';
 import 'package:espoch/vistas/reutilizables.dart';
@@ -53,7 +57,6 @@ class _InicioPageState extends State<InicioPage> {
         for (var doc in data) {
           Map<String, dynamic> repoData = doc.data() as Map<String, dynamic>;
           String nombre = repoData['nombre'];
-
           String? urlImagen = repoData['urlImagen'];
 
           if (urlImagen != null) {
@@ -75,12 +78,14 @@ class _InicioPageState extends State<InicioPage> {
                       Image.network(
                         urlImagen,
                         fit: BoxFit.cover,
+                        errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                          return Icon(Icons.error);
+                        },
                       ),
                       const SizedBox(height: 8.0),
                       AutoSizeText(
                         nombre,
-                        style: const TextStyle(
-                            fontSize: 12.0, color: Colors.black),
+                        style: const TextStyle(fontSize: 12.0, color: Colors.black),
                         textAlign: TextAlign.center,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
@@ -148,30 +153,17 @@ class _InicioPageState extends State<InicioPage> {
             const Align(
               alignment: Alignment.topLeft,
               child: Text(
-                'Recursos mas populares',
+                'Recursos más populares',
                 style: TextStyle(fontSize: 18),
               ),
             ),
             const SizedBox(height: 5),
-
-            ////aqui se ponen los repositorios ahora esta solo creandose aleatoriamente pero deberia ir con una base de datos
             Expanded(
-              child: PageView(
-                controller: _pageController,
-                scrollDirection: Axis.horizontal,
-                onPageChanged: (int page) {
-                  setState(() {
-                    _currentPage = page;
-                  });
-                },
-                children: [_buildPageItems()],
-              ),
+              child: _buildPageItems(),
             ),
           ],
         ),
       ),
-
-      ////footer
       bottomNavigationBar: MyBottomNavigationBar(),
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
