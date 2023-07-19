@@ -17,7 +17,7 @@ bool isVideosExpanded = false;
   @override
   Widget build(BuildContext context) {
     return  Scaffold (
-    appBar: MyAppBar(),
+    appBar: MyAppBar(isLoggedIn: false,),
     body: Padding(
       padding: const EdgeInsets.all(30.0),
       child: Column(

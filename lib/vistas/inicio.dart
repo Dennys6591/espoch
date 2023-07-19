@@ -70,29 +70,46 @@ class _InicioPageState extends State<InicioPage> {
                     ),
                   );
                 },
-                child: Container(
-                  color: Colors.grey[300], // Puedes personalizar el color
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Image.network(
-                        urlImagen,
-                        fit: BoxFit.cover,
-                        errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-                          return Icon(Icons.error);
-                        },
-                      ),
-                      const SizedBox(height: 8.0),
-                      AutoSizeText(
-                        nombre,
-                        style: const TextStyle(fontSize: 12.0, color: Colors.black),
-                        textAlign: TextAlign.center,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                ),
+  child: Container(
+  width: 500,
+  height: 150,
+  child: Center(
+    child: SizedBox(
+      width: 500,
+      height: 300,
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.grey[300], // Puedes personalizar el color de fondo
+          borderRadius: BorderRadius.circular(10.0), // Ajusta el radio de borde según sea necesario
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.network(
+              urlImagen,
+              width: 80,
+              height: 80,
+              fit: BoxFit.cover,
+              errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                return Icon(Icons.error);
+              },
+            ),
+            const SizedBox(height: 8.0),
+            AutoSizeText(
+              nombre,
+              style: const TextStyle(fontSize: 12.0, color: Colors.black),
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
+      ),
+    ),
+  ),
+),
+
               ),
             );
           }
@@ -100,7 +117,7 @@ class _InicioPageState extends State<InicioPage> {
 
         return ListView(
           shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
+         // physics: const NeverScrollableScrollPhysics(),
           children: page,
         );
       },
@@ -144,27 +161,41 @@ class _InicioPageState extends State<InicioPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(),
-     body: Padding(
+      appBar: MyAppBar(
+        isLoggedIn: false,
+      ),
+      body: Padding(
   padding: const EdgeInsets.all(8.0),
-  child: SingleChildScrollView(
-    child: Column(
-      children: <Widget>[
-        const SizedBox(height: 10),
-        const Align(
-          alignment: Alignment.topLeft,
-          child: Text(
-            'Recursos más populares',
-            style: TextStyle(fontSize: 18),
+  child: Column(
+    children: <Widget>[
+      const SizedBox(height: 10),
+      const Align(
+        alignment: Alignment.topLeft,
+        child: Text(
+          'Recursos más populares',
+          style: TextStyle(fontSize: 18),
+        ),
+      ),
+      const SizedBox(height: 5),
+      Expanded( // Envolver el contenedor en un Expanded para permitir que ocupe todo el espacio vertical disponible
+        child: SingleChildScrollView(
+          child: Container(
+            child: AspectRatio(
+              aspectRatio: 16 / 9, // Proporción de aspecto deseada (puedes ajustarlo según tus necesidades)
+              child: _buildPageItems(),
+            ),
+            decoration: BoxDecoration(
+              color: Color.fromARGB(255, 173, 75,
+                  75), // Puedes personalizar el color de fondo
+              borderRadius: BorderRadius.circular(
+                  8.0), // Ajusta el radio de la esquina según sea necesario
+            ),
           ),
         ),
-        const SizedBox(height: 5),
-        _buildPageItems(),
-      ],
-    ),
+      ),
+    ],
   ),
 ),
-
       bottomNavigationBar: MyBottomNavigationBar(),
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

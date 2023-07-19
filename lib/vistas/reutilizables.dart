@@ -1,3 +1,5 @@
+import 'package:espoch/vistas/login.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:espoch/constantes.dart';
 import 'package:espoch/vistas/inicioUserLogeado.dart';
@@ -5,10 +7,15 @@ import 'package:espoch/vistas/inicioUserLogeado.dart';
 import 'inicio.dart';
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const MyAppBar({super.key});
+  
+   final bool isLoggedIn;
+
+  const MyAppBar({required this.isLoggedIn, Key? key}) : super(key: key);
 
   @override
+  
   Widget build(BuildContext context) {
+  
     return AppBar(
       backgroundColor: color1,
       leading: Padding(
@@ -106,22 +113,36 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                 style: TextStyle(color: Colors.white)),
           ),
         ),
-        FloatingActionButton(
+      FloatingActionButton(
           onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => InicioLogeadoPage()));
+            if (isLoggedIn) {
+              // Cerrar sesión
+              FirebaseAuth.instance.signOut();
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => InicioPage()),
+                (Route<dynamic> route) => false,
+              );
+            } else {
+              // Iniciar sesión
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => LoginApp()),
+              );
+            }
           },
           backgroundColor: const Color.fromARGB(0, 0, 0, 0),
           elevation: 50.0,
-          child: const Column(
+          child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.person_2_outlined,
-                  color: Color.fromARGB(255, 255, 255, 255)),
-              SizedBox(
-                  height: 4.0), // Espacio vertical entre el icono y el texto
+              Icon(
+                isLoggedIn ? Icons.logout : Icons.person_2_outlined,
+                color: Color.fromARGB(255, 255, 255, 255),
+              ),
+              SizedBox(height: 4.0),
               Text(
-                'Iniciar\nsesión',
+                isLoggedIn ? 'Cerrar\nsesión' : 'Iniciar\nsesión',
                 style: TextStyle(
                   fontSize: 9.0,
                   color: Colors.white,
@@ -129,7 +150,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
             ],
           ),
-        )
+        ),
       ],
     );
   }

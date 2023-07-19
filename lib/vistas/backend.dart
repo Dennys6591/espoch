@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -68,7 +69,7 @@ void Subir_PDF(
   }
 }
 
-////////////////////////////// subir nombre repositorio
+////////////////////////////// subir nombre tipo e imagen repositorio
 Future<void> guardarNombreRepositorio(
     String nombreRepositorio,
     String tipoRepositorio,
@@ -88,7 +89,8 @@ Future<void> guardarNombreRepositorio(
       numDocumentos++;
       nuevoID = 'repo${numDocumentos + 1}';
     }
-
+final user = FirebaseAuth.instance.currentUser;
+final userID = user?.uid; // Obtener el ID del usuario autenticado
     // Crear un nuevo documento con el nuevo ID generado
     DocumentReference newRepoRef = repositorios.doc(nuevoID);
 
@@ -97,6 +99,7 @@ Future<void> guardarNombreRepositorio(
       'id': nuevoID,
       'nombre': nombreRepositorio,
       'tipo': tipoRepositorio,
+      'usuario': userID,
     });
 
     print('Nombre y tipo del repositorio guardado en Firestore con ID: $nuevoID');
@@ -131,6 +134,7 @@ Future<void> guardarNombreRepositorio(
         Navigator.pop(context);
 
         // Mostrar la imagen en una pantalla flotante
+      // ignore: use_build_context_synchronously
       showDialog(
   context: context,
   builder: (context) => AlertDialog(
@@ -145,7 +149,8 @@ Future<void> guardarNombreRepositorio(
     ],
   ),
 );
-      } catch (e) {
+      } 
+      catch (e) {
         print('Error al subir la imagen: $e');
       }
     } else {
