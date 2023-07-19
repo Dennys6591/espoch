@@ -145,7 +145,7 @@ class _InicioPageState extends State<InicioPage> {
     }
   }
 
-  void _nextPage() {
+  /*void _nextPage() {
     if (_currentPage < _pageItems.length - 1) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
@@ -160,7 +160,7 @@ class _InicioPageState extends State<InicioPage> {
         _currentPage = 0;
       });
     }
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -170,7 +170,7 @@ class _InicioPageState extends State<InicioPage> {
         isLoggedIn: false,
       ),
       body: Padding(
-  padding: const EdgeInsets.all(8.0),
+  padding: const EdgeInsets.all(50.0),
   child: Column(
     children: <Widget>[
       const SizedBox(height: 10),
@@ -181,12 +181,13 @@ class _InicioPageState extends State<InicioPage> {
           style: TextStyle(fontSize: 18),
         ),
       ),
-      const SizedBox(height: 10),
-      Expanded( // Envolver el contenedor en un Expanded para permitir que ocupe todo el espacio vertical disponible
+      const SizedBox(height: 20),
+      Expanded(
+         // Envolver el contenedor en un Expanded para permitir que ocupe todo el espacio vertical disponible
         child: SingleChildScrollView(
           child: Container(
             child: AspectRatio(
-              aspectRatio: 18 /24, // Proporción de aspecto deseada (puedes ajustarlo según tus necesidades)
+              aspectRatio: 18 /22, // Proporción de aspecto deseada (puedes ajustarlo según tus necesidades)
               child: _buildPageItems(),
             ),
             decoration: BoxDecoration(
@@ -206,7 +207,7 @@ class _InicioPageState extends State<InicioPage> {
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Padding(
+    /*      Padding(
             padding: const EdgeInsets.only(left: 10.0),
             child: IconButton(
               onPressed: _previousPage,
@@ -216,7 +217,7 @@ class _InicioPageState extends State<InicioPage> {
           IconButton(
             onPressed: _nextPage,
             icon: const Icon(Icons.arrow_forward),
-          ),
+          ),*/
         ],
       ),
     );

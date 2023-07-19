@@ -16,12 +16,15 @@ class _SubirPDF extends State<SubirPDF> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Subir PDF a Firebase Storage')),
+      appBar: AppBar(title: Text('Subir PDF a Firebase Storage'),  backgroundColor:Color.fromARGB(255, 202, 11, 11),),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
+               style: ElevatedButton.styleFrom(
+                backgroundColor: Color.fromARGB(255, 202, 11, 11),
+              ),
               onPressed: Escoger_PDF,
               child: Text('Seleccionar PDF'),
             ),
@@ -35,6 +38,9 @@ class _SubirPDF extends State<SubirPDF> {
             ),
             SizedBox(height: 20),
             ElevatedButton(
+               style: ElevatedButton.styleFrom(
+                backgroundColor: Color.fromARGB(255, 202, 11, 11),
+              ),
   onPressed: () {
     Subir_PDF(_fileNameController, context);
   },
