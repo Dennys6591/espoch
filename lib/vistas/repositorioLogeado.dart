@@ -17,7 +17,7 @@ bool isVideosExpanded = false;
   @override
   Widget build(BuildContext context) {
     return  Scaffold (
-    appBar: MyAppBar(isLoggedIn: false,),
+    appBar: MyAppBar(isLoggedIn: true,),
     body: Padding(
       padding: const EdgeInsets.all(30.0),
       child: Column(
@@ -27,6 +27,22 @@ bool isVideosExpanded = false;
         const Text("Nombre del recurso", style: TextStyle(fontSize: 18),),
          const SizedBox(height: 40),
       //////////////////////////barras desplegables con los recursos
+       const SizedBox(height: 10),
+        Container(
+          color: Color.fromARGB(255, 25, 182, 33),
+          child: IconButton(
+            onPressed: () {
+              // Lógica para manejar la acción del botón "+"
+
+            },
+            icon: Icon(
+              Icons.add,
+              size: 24,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        const SizedBox(height: 10),
          GestureDetector(
         onTap: () {
           setState(() {
