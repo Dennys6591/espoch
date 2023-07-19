@@ -6,10 +6,7 @@ class LoginApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Login',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      title: 'Ingresar',
       home: LoginPage(),
     );
   }
@@ -31,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        backgroundColor: Colors.red,
+        backgroundColor: Color.fromARGB(255, 192, 30, 18),
       ),
     );
   }
@@ -66,47 +63,55 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Login'),
+        backgroundColor:Color.fromARGB(255, 202, 11, 11),
       ),
-     body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: <Widget>[
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Usuario'),
-                validator: (value) {
-                  if (value?.isEmpty ?? true) {
-                    return 'Por favor, ingresa el usuario';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _email = value!;
-                },
+   body: SingleChildScrollView(
+  child: Center(
+    child: Padding(
+      padding: EdgeInsets.all(250.0),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          children: <Widget>[
+            TextFormField(
+              decoration: InputDecoration(labelText: 'Correo', prefixIcon: Icon(Icons.email)),
+              validator: (value) {
+                if (value?.isEmpty ?? true) {
+                  return 'Por favor, ingresa el usuario';
+                }
+                return null;
+              },
+              onSaved: (value) {
+                _email = value!;
+              },
+            ),
+            TextFormField(
+              decoration: InputDecoration(labelText: 'Contraseña', prefixIcon: Icon(Icons.password_outlined),),
+              obscureText: true,
+              validator: (value) {
+                if (value?.isEmpty ?? true) {
+                  return 'Por favor, ingresa la contraseña';
+                }
+                return null;
+              },
+              onSaved: (value) {
+                _password = value!;
+              },
+            ),
+            SizedBox(height: 50.0),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color.fromARGB(255, 202, 11, 11),
               ),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Contraseña'),
-                obscureText: true,
-                validator: (value) {
-                  if (value?.isEmpty ?? true) {
-                    return 'Por favor, ingresa la contraseña';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _password = value!;
-                },
-              ),
-              SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: _signInWithEmailAndPassword,
-                child: Text('Iniciar sesión'),
-              ),
-            ],
-          ),
+              onPressed: _signInWithEmailAndPassword,
+              child: Text('Iniciar sesión'),
+            ),
+          ],
         ),
       ),
+    ),
+  ),
+),
     );
   }
 }
