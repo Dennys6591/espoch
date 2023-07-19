@@ -68,7 +68,7 @@ class _LoginPageState extends State<LoginPage> {
    body: SingleChildScrollView(
   child: Center(
     child: Padding(
-      padding: EdgeInsets.all(250.0),
+      padding: EdgeInsets.all(25.0),
       child: Form(
         key: _formKey,
         child: Column(
