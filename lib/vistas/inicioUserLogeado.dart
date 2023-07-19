@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:espoch/vistas/repositorioLogeado.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:espoch/vistas/crearRepositorio.dart';
@@ -105,7 +106,7 @@ class _InicioLogeadoPageState extends State<InicioLogeadoPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const repositoriosScreem(),
+                      builder: (context) => const repositoriosScreemLog(),
                     ),
                   );
                 },

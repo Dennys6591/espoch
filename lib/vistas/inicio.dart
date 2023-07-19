@@ -181,12 +181,12 @@ class _InicioPageState extends State<InicioPage> {
           style: TextStyle(fontSize: 18),
         ),
       ),
-      const SizedBox(height: 5),
+      const SizedBox(height: 10),
       Expanded( // Envolver el contenedor en un Expanded para permitir que ocupe todo el espacio vertical disponible
         child: SingleChildScrollView(
           child: Container(
             child: AspectRatio(
-              aspectRatio: 16 / 9, // Proporción de aspecto deseada (puedes ajustarlo según tus necesidades)
+              aspectRatio: 18 /24, // Proporción de aspecto deseada (puedes ajustarlo según tus necesidades)
               child: _buildPageItems(),
             ),
             decoration: BoxDecoration(
