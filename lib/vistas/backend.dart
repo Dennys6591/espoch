@@ -104,6 +104,26 @@ final userID = user?.uid; // Obtener el ID del usuario autenticado
 
     print('Nombre y tipo del repositorio guardado en Firestore con ID: $nuevoID');
 
+
+
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Ingresar una imagen para el repositorio'),
+          content: Text('Por favor, selecciona una imagen para continuar.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Aceptar'),
+            ),
+          ],
+        );
+      },
+    );
+  
     // Subir la imagen y guardar la URL en Firestore
 
     Uint8List? imageBytes = await seleccionarImagen();
