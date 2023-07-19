@@ -70,7 +70,9 @@ void Subir_PDF(
 
 ////////////////////////////// subir nombre repositorio
 Future<void> guardarNombreRepositorio(
-    String nombreRepositorio, BuildContext context) async {
+    String nombreRepositorio,
+    String tipoRepositorio,
+    BuildContext context) async {
   if (nombreRepositorio.isNotEmpty) {
     // Guardar el nombre del repositorio en Firestore
     CollectionReference repositorios =
@@ -92,10 +94,12 @@ Future<void> guardarNombreRepositorio(
 
     // Guardar el nombre del repositorio en el nuevo documento
     await newRepoRef.set({
+      'id': nuevoID,
       'nombre': nombreRepositorio,
+      'tipo': tipoRepositorio,
     });
 
-    print('Nombre del repositorio guardado en Firestore con ID: $nuevoID');
+    print('Nombre y tipo del repositorio guardado en Firestore con ID: $nuevoID');
 
     // Subir la imagen y guardar la URL en Firestore
 

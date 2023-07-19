@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'dart:async';
 import 'backend.dart';
 import 'UpLoadLogic.dart';
 
@@ -177,7 +175,7 @@ class _CrearRepositorioState extends State<CrearRepositorio> {
                       Color.fromARGB(255, 27, 155, 53)),
                 ),
                 onPressed: () {
-                  guardarNombreRepositorio(_controllerNombreRecurso, context);
+                  guardarNombreRepositorio(_controllerNombreRecurso,_selectedOptionTipoRecurso, context);
                    //Subir_PDF(_fileNameController, context);
                 },
                 child: Text('Guardar repositorio'),
