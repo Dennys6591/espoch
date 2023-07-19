@@ -23,6 +23,10 @@ class _InicioPageState extends State<InicioPage> {
 
   double containerHeight = 250.0;
 
+  // Modifica el tamaño de las imágenes aquí
+  double imageWidth = 150.0;
+  double imageHeight = 150.0;
+
   // Cantidad de recursos que deseas mostrar
   @override
   void initState() {
@@ -72,20 +76,28 @@ class _InicioPageState extends State<InicioPage> {
                 },
                 child: Container(
                   color: Colors.grey[300], // Puedes personalizar el color
+                  width: imageWidth,
+                  height:
+                      containerHeight, // Puedes ajustar el alto del contenedor si es necesario
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Image.network(
                         urlImagen,
-                        fit: BoxFit.cover,
-                        errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                        width: imageWidth,
+                        height: imageHeight,
+                        fit: BoxFit
+                            .cover, // Ajusta la imagen para que ocupe todo el espacio del contenedor
+                        errorBuilder: (BuildContext context, Object exception,
+                            StackTrace? stackTrace) {
                           return Icon(Icons.error);
                         },
                       ),
                       const SizedBox(height: 8.0),
                       AutoSizeText(
                         nombre,
-                        style: const TextStyle(fontSize: 12.0, color: Colors.black),
+                        style: const TextStyle(
+                            fontSize: 12.0, color: Colors.black),
                         textAlign: TextAlign.center,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
@@ -145,26 +157,25 @@ class _InicioPageState extends State<InicioPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppBar(),
-     body: Padding(
-  padding: const EdgeInsets.all(8.0),
-  child: SingleChildScrollView(
-    child: Column(
-      children: <Widget>[
-        const SizedBox(height: 10),
-        const Align(
-          alignment: Alignment.topLeft,
-          child: Text(
-            'Recursos más populares',
-            style: TextStyle(fontSize: 18),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              const SizedBox(height: 10),
+              const Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  'Recursos más populares',
+                  style: TextStyle(fontSize: 18),
+                ),
+              ),
+              const SizedBox(height: 5),
+              _buildPageItems(),
+            ],
           ),
         ),
-        const SizedBox(height: 5),
-        _buildPageItems(),
-      ],
-    ),
-  ),
-),
-
+      ),
       bottomNavigationBar: MyBottomNavigationBar(),
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
