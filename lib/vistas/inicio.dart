@@ -23,6 +23,10 @@ class _InicioPageState extends State<InicioPage> {
 
   double containerHeight = 250.0;
 
+  // Modifica el tamaño de las imágenes aquí
+  double imageWidth = 150.0;
+  double imageHeight = 150.0;
+
   // Cantidad de recursos que deseas mostrar
   @override
   void initState() {
@@ -161,6 +165,7 @@ class _InicioPageState extends State<InicioPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       appBar: MyAppBar(
         isLoggedIn: false,
       ),
@@ -196,6 +201,7 @@ class _InicioPageState extends State<InicioPage> {
     ],
   ),
 ),
+
       bottomNavigationBar: MyBottomNavigationBar(),
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
