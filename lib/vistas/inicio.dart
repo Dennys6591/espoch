@@ -48,85 +48,85 @@ class _InicioPageState extends State<InicioPage> {
 
   // Modifica la función _buildPageItems para obtener datos desde Firebase
   Widget _buildPageItems() {
-    return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection('repositorios').snapshots(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return const CircularProgressIndicator();
-        }
+  return StreamBuilder<QuerySnapshot>(
+    stream: FirebaseFirestore.instance.collection('repositorios').snapshots(),
+    builder: (context, snapshot) {
+      if (!snapshot.hasData) {
+        return const CircularProgressIndicator();
+      }
 
-        final data = snapshot.data!.docs;
-        List<Widget> page = [];
+      final data = snapshot.data!.docs;
+      List<Widget> page = [];
 
-        for (var doc in data) {
-          Map<String, dynamic> repoData = doc.data() as Map<String, dynamic>;
-          String nombre = repoData['nombre'];
-          String? urlImagen = repoData['urlImagen'];
+      for (var doc in data) {
+        Map<String, dynamic> repoData = doc.data() as Map<String, dynamic>;
+        String id = repoData['id']; // Obtén el ID del documento
+        String nombre = repoData['nombre'];
+        String? urlImagen = repoData['urlImagen'];
 
-          if (urlImagen != null) {
-            page.add(
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const repositoriosScreem(),
-                    ),
-                  );
-                },
-  child: Container(
-  width: 500,
-  height: 150,
-  child: Center(
-    child: SizedBox(
-      width: 500,
-      height: 300,
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.grey[300], // Puedes personalizar el color de fondo
-          borderRadius: BorderRadius.circular(10.0), // Ajusta el radio de borde según sea necesario
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.network(
-              urlImagen,
-              width: 80,
-              height: 80,
-              fit: BoxFit.cover,
-              errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-                return Icon(Icons.error);
+        if (urlImagen != null) {
+          page.add(
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => repositoriosScreem(id), // Pasa el ID como parámetro
+                  ),
+                );
               },
-            ),
-            const SizedBox(height: 8.0),
-            AutoSizeText(
-              nombre,
-              style: const TextStyle(fontSize: 12.0, color: Colors.black),
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
-        ),
-      ),
-    ),
-  ),
-),
-
+              child: Container(
+                width: 500,
+                height: 150,
+                child: Center(
+                  child: SizedBox(
+                    width: 500,
+                    height: 300,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.network(
+                            urlImagen,
+                            width: 80,
+                            height: 80,
+                            fit: BoxFit.cover,
+                            errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                              return Icon(Icons.error);
+                            },
+                          ),
+                          const SizedBox(height: 8.0),
+                          AutoSizeText(
+                            nombre,
+                            style: const TextStyle(fontSize: 12.0, color: Colors.black),
+                            textAlign: TextAlign.center,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
               ),
-            );
-          }
+            ),
+          );
         }
+      }
 
-        return ListView(
-          shrinkWrap: true,
-         // physics: const NeverScrollableScrollPhysics(),
-          children: page,
-        );
-      },
-    );
-  }
+      return ListView(
+        shrinkWrap: true,
+        // physics: const NeverScrollableScrollPhysics(),
+        children: page,
+      );
+    },
+  );
+}
 
   void _previousPage() {
     if (_currentPage > 0) {
@@ -144,23 +144,6 @@ class _InicioPageState extends State<InicioPage> {
       });
     }
   }
-
-  /*void _nextPage() {
-    if (_currentPage < _pageItems.length - 1) {
-      _pageController.nextPage(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-      setState(() {
-        _currentPage++;
-      });
-    } else {
-      _pageController.jumpToPage(0);
-      setState(() {
-        _currentPage = 0;
-      });
-    }
-  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -204,21 +187,9 @@ class _InicioPageState extends State<InicioPage> {
 ),
 
       bottomNavigationBar: MyBottomNavigationBar(),
-      floatingActionButton: Row(
+      floatingActionButton: const Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-    /*      Padding(
-            padding: const EdgeInsets.only(left: 10.0),
-            child: IconButton(
-              onPressed: _previousPage,
-              icon: const Icon(Icons.arrow_back),
-            ),
-          ),
-          IconButton(
-            onPressed: _nextPage,
-            icon: const Icon(Icons.arrow_forward),
-          ),*/
-        ],
+        children: [],
       ),
     );
   }
