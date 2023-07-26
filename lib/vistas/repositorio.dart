@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:espoch/vistas/reutilizables.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class repositoriosScreem extends StatefulWidget {
   final String id; // Recibe el ID como parámetro
@@ -171,15 +172,25 @@ class _repositoriosState extends State<repositoriosScreem> {
                 ),
               ),
             ),
-            if (isPDFExpanded)
-              Container(
-                padding: const EdgeInsets.all(8.0),
-                color: Colors.grey,
-                child: Text(
-                  urlPDF, // Muestra la URL del PDF
-                  style: TextStyle(fontSize: 16),
-                ),
-              ),
+          if (isPDFExpanded)
+  Container(
+    padding: const EdgeInsets.all(8.0),
+    color: Colors.grey,
+    child: GestureDetector(
+      onTap: () async {
+        if (await canLaunch(urlPDF)) {
+          await launch(urlPDF);
+        } else {
+          // Si no se puede abrir la URL, puedes mostrar un mensaje de error
+          print('Error al abrir el PDF');
+        }
+      },
+      child: Text(
+        'Ver PDF',
+        style: TextStyle(fontSize: 16),
+      ),
+    ),
+  ),
             GestureDetector(
               onTap: () {
                 // Aquí manejas la expansión de la sección de Otros
