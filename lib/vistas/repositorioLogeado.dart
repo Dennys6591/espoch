@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:espoch/vistas/reutilizables.dart';
 
@@ -13,6 +14,9 @@ bool isVideosExpanded = false;
   bool isPresentacionesExpanded = false;
   bool isPDFExpanded = false;
   bool isOtrosExpanded = false;
+
+
+  // Función para eliminar el repositorio
 
   @override
   Widget build(BuildContext context) {
@@ -191,7 +195,21 @@ bool isVideosExpanded = false;
             style: TextStyle(fontSize: 16),
           ),
         ),
-    
+      Container(
+          color: Color.fromARGB(255, 25, 182, 33),
+          child: IconButton(
+            onPressed: () {
+              // Lógica para manejar la acción del botón "delete"
+            
+            },
+            icon: Icon(
+              Icons.delete,
+              size: 24,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        const SizedBox(height: 10),
         //////////////////////////////
         
        ],
@@ -201,3 +219,4 @@ bool isVideosExpanded = false;
     );
   }
 }
+
