@@ -38,12 +38,10 @@ class _InicioLogeadoPageState extends State<InicioLogeadoPage> {
 
   @override
   void didChangeDependencies() {
-  
     super.didChangeDependencies();
   }
 
 ///// se crean los repositorios aleatorios
- 
 
   void _previousPage() {
     if (_currentPage > 0) {
@@ -81,12 +79,15 @@ class _InicioLogeadoPageState extends State<InicioLogeadoPage> {
 
   //////llamar contenedores
   Widget _buildPageItems() {
-  final user = FirebaseAuth.instance.currentUser;
-  final userID = user?.uid; // Obtener el ID del usuario autenticado
+    final user = FirebaseAuth.instance.currentUser;
+    final userID = user?.uid; // Obtener el ID del usuario autenticado
 
-  return StreamBuilder<QuerySnapshot>(
-    stream: FirebaseFirestore.instance.collection('repositorios').where('usuario', isEqualTo: userID).snapshots(),
-    builder: (context, snapshot) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection('repositorios')
+          .where('usuario', isEqualTo: userID)
+          .snapshots(),
+      builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return const CircularProgressIndicator();
         }
@@ -111,46 +112,48 @@ class _InicioLogeadoPageState extends State<InicioLogeadoPage> {
                   );
                 },
                 child: Container(
-  width: 500,
-  height: 150,
-  child: Center(
-    child: SizedBox(
-      width: 500,
-      height: 300,
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.grey[300], // Puedes personalizar el color de fondo
-          borderRadius: BorderRadius.circular(10.0), // Ajusta el radio de borde según sea necesario
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.network(
-              urlImagen,
-              width: 80,
-              height: 80,
-              fit: BoxFit.cover,
-              errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-                return Icon(Icons.error);
-              },
-            ),
-            const SizedBox(height: 8.0),
-            AutoSizeText(
-              nombre,
-              style: const TextStyle(fontSize: 12.0, color: Colors.black),
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
-        ),
-      ),
-    ),
-  ),
-),
-
-                
+                  width: 500,
+                  height: 150,
+                  child: Center(
+                    child: SizedBox(
+                      width: 500,
+                      height: 300,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[
+                              300], // Puedes personalizar el color de fondo
+                          borderRadius: BorderRadius.circular(
+                              10.0), // Ajusta el radio de borde según sea necesario
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.network(
+                              urlImagen,
+                              width: 80,
+                              height: 80,
+                              fit: BoxFit.cover,
+                              errorBuilder: (BuildContext context,
+                                  Object exception, StackTrace? stackTrace) {
+                                return Icon(Icons.error);
+                              },
+                            ),
+                            const SizedBox(height: 8.0),
+                            AutoSizeText(
+                              nombre,
+                              style: const TextStyle(
+                                  fontSize: 12.0, color: Colors.black),
+                              textAlign: TextAlign.center,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               ),
             );
           }
@@ -158,107 +161,109 @@ class _InicioLogeadoPageState extends State<InicioLogeadoPage> {
 
         return ListView(
           shrinkWrap: true,
-         // physics: const NeverScrollableScrollPhysics(),
+          // physics: const NeverScrollableScrollPhysics(),
           children: page,
         );
       },
     );
   }
+
   ///
-  
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(isLoggedIn: true,),
-    body: SingleChildScrollView(
-  child: Padding(
-    padding: const EdgeInsets.all(8.0),
-    child: Column(
-      children: <Widget>[
-        const SizedBox(height: 10),
-        const Align(
-          alignment: Alignment.topLeft,
-          child: Text(
-            'Mis repositorios',
-            style: TextStyle(fontSize: 18),
-          ),
-        ),
-        const SizedBox(height: 15),
-        Row(
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: '   Buscar',
-                      border: InputBorder.none,
+      appBar: MyAppBar(
+        isLoggedIn: true,
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: <Widget>[
+              const SizedBox(height: 10),
+              const Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  'Mis repositorios',
+                  style: TextStyle(fontSize: 18),
+                ),
+              ),
+              const SizedBox(height: 15),
+              Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        child: TextField(
+                          decoration: InputDecoration(
+                            hintText: '   Buscar',
+                            border: InputBorder.none,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
+                  Container(
+                    color: Color.fromARGB(255, 25, 182, 33),
+                    child: IconButton(
+                      onPressed: () {
+                        // Lógica para manejar la acción del botón de búsqueda
+                      },
+                      icon: Icon(
+                        Icons.search,
+                        size: 24,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Container(
+                color: Color.fromARGB(255, 25, 182, 33),
+                child: IconButton(
+                  onPressed: () {
+                    // Lógica para manejar la acción del botón "+"
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => CrearRepositorio()),
+                    );
+                  },
+                  icon: Icon(
+                    Icons.add,
+                    size: 24,
+                    color: Colors.white,
+                  ),
                 ),
               ),
-            ),
-            Container(
-              color: Color.fromARGB(255, 25, 182, 33),
-              child: IconButton(
-                onPressed: () {
-                  // Lógica para manejar la acción del botón de búsqueda
-                },
-                icon: Icon(
-                  Icons.search,
-                  size: 24,
-                  color: Colors.white,
+              const SizedBox(height: 10),
+              ////aqui se ponen los repositorios ahora esta solo creandose aleatoriamente pero deberia ir con una base de datos
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: <Widget>[
+                      const SizedBox(height: 10),
+                      const Align(
+                        alignment: Alignment.topLeft,
+                      ),
+                      const SizedBox(height: 5),
+                      _buildPageItems(),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 10),
-        Container(
-          color: Color.fromARGB(255, 25, 182, 33),
-          child: IconButton(
-            onPressed: () {
-              // Lógica para manejar la acción del botón "+"
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => CrearRepositorio()),
-              );
-            },
-            icon: Icon(
-              Icons.add,
-              size: 24,
-              color: Colors.white,
-            ),
+            ],
           ),
         ),
-        const SizedBox(height: 10),
-        ////aqui se ponen los repositorios ahora esta solo creandose aleatoriamente pero deberia ir con una base de datos
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                const SizedBox(height: 10),
-                const Align(
-                  alignment: Alignment.topLeft,
-                ),
-                const SizedBox(height: 5),
-                _buildPageItems(),
-              ],
-            ),
-          ),
-        ),
-      ],
-    ),
-  ),
-),
-
+      ),
 
       ////footer
       bottomNavigationBar: MyBottomNavigationBar(),
