@@ -13,12 +13,15 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:file_picker/file_picker.dart';
 import 'UpLoadLogic.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:firebase_admin/firebase_admin.dart';
+
 TextEditingController _fileNameController = TextEditingController();
 SubirPDF ObjPdf = SubirPDF();
 String urlPdf = '';
 late var downloadURLpdf;
 Uint8List? _pdfBytes;
 var urlPDF = '';
+var _rarBytes;
 ////////////////Elegir un pfd////////////////
 Future<void> Escoger_PDF() async {
   FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -33,7 +36,21 @@ Future<void> Escoger_PDF() async {
   }
 }
 
-////////////////Subir el pdf a storage////////////////
+/////////////////////////escoger rar
+Future<void> Escoger_RAR() async {
+  FilePickerResult? result = await FilePicker.platform.pickFiles(
+    type: FileType.custom,
+    allowedExtensions: ['rar'],
+  );
+
+  if (result != null) {
+    _rarBytes = result.files.single.bytes;
+  } else {
+    print('El usuario canceló la operación...');
+  }
+}
+
+////// subir rar
 void Subir_PDF(
     TextEditingController nombre_archivo, BuildContext context) async {
   if (_pdfBytes == null) {
@@ -62,18 +79,30 @@ void Subir_PDF(
     print('URL de descarga del archivo: $downloadURLpdf');
     // await guardarURLenFirestore(fileName, downloadURLpdf);
     // url_PDF(downloadURLpdf); //
-    print('Archivo subido con éxito.');
-     Navigator.pop(context);
+    print('Archivo PDF subido con éxito.');
+
+    // Subimos el archivo RAR
+    final storageRefRAR =
+        FirebaseStorage.instance.ref().child('rars').child(fileName + '.rar');
+    await storageRefRAR.putData(_rarBytes!);
+    // Obtenemos la URL de descarga del archivo RAR
+    final downloadURLrar = await storageRefRAR.getDownloadURL();
+    print('URL de descarga del archivo RAR: $downloadURLrar');
+    // Guardamos la URL en Firestore
+    await FirebaseFirestore.instance
+        .collection('archivos')
+        .doc(fileName)
+        .set({'downloadURL': downloadURLrar});
+    print('Archivo RAR subido con éxito.');
+    Navigator.pop(context);
   } catch (e) {
     print('Error al subir el archivo: $e');
   }
 }
 
 ////////////////////////////// subir nombre tipo e imagen repositorio
-Future<void> guardarNombreRepositorio(
-    String nombreRepositorio,
-    String tipoRepositorio,
-    BuildContext context) async {
+Future<void> guardarNombreRepositorio(String nombreRepositorio,
+    String tipoRepositorio, BuildContext context) async {
   if (nombreRepositorio.isNotEmpty) {
     // Guardar el nombre del repositorio en Firestore
     CollectionReference repositorios =
@@ -89,8 +118,8 @@ Future<void> guardarNombreRepositorio(
       numDocumentos++;
       nuevoID = 'repo${numDocumentos + 1}';
     }
-final user = FirebaseAuth.instance.currentUser;
-final userID = user?.uid; // Obtener el ID del usuario autenticado
+    final user = FirebaseAuth.instance.currentUser;
+    final userID = user?.uid; // Obtener el ID del usuario autenticado
     // Crear un nuevo documento con el nuevo ID generado
     DocumentReference newRepoRef = repositorios.doc(nuevoID);
 
@@ -102,9 +131,8 @@ final userID = user?.uid; // Obtener el ID del usuario autenticado
       'usuario': userID,
     });
 
-    print('Nombre y tipo del repositorio guardado en Firestore con ID: $nuevoID');
-
-
+    print(
+        'Nombre y tipo del repositorio guardado en Firestore con ID: $nuevoID');
 
     await showDialog(
       context: context,
@@ -123,7 +151,7 @@ final userID = user?.uid; // Obtener el ID del usuario autenticado
         );
       },
     );
-  
+
     // Subir la imagen y guardar la URL en Firestore
 
     Uint8List? imageBytes = await seleccionarImagen();
@@ -140,11 +168,12 @@ final userID = user?.uid; // Obtener el ID del usuario autenticado
         await storageRef.putData(imageBytes, metadata);
 
         String downloadURL = await storageRef.getDownloadURL();
-
+        String downloadURLrar = await storageRef.getDownloadURL();
         await newRepoRef.set(
           {
             'urlImagen': downloadURL,
             'url_PDF': downloadURLpdf,
+            'url_RAR': downloadURLrar,
           },
           SetOptions(merge: true),
         );
@@ -154,23 +183,22 @@ final userID = user?.uid; // Obtener el ID del usuario autenticado
         Navigator.pop(context);
 
         // Mostrar la imagen en una pantalla flotante
-      // ignore: use_build_context_synchronously
-      showDialog(
-  context: context,
-  builder: (context) => AlertDialog(
-    content: Image.memory(imageBytes),
-    actions: [
-      TextButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        child: Text('Cerrar'),
-      ),
-    ],
-  ),
-);
-      } 
-      catch (e) {
+        // ignore: use_build_context_synchronously
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            content: Image.memory(imageBytes),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Cerrar'),
+              ),
+            ],
+          ),
+        );
+      } catch (e) {
         print('Error al subir la imagen: $e');
       }
     } else {
@@ -210,9 +238,10 @@ Future<Uint8List?> seleccionarImagen() async {
       }
     });
   } else {
- // Dispositivo móvil
+    // Dispositivo móvil
     final imagePicker = ImagePicker();
-    final pickedImage = await imagePicker.pickImage(source: ImageSource.gallery);
+    final pickedImage =
+        await imagePicker.pickImage(source: ImageSource.gallery);
 
     if (pickedImage != null) {
       final imageBytes = await pickedImage.readAsBytes();

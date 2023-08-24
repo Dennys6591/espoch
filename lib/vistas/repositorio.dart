@@ -19,7 +19,7 @@ class _repositoriosState extends State<repositoriosScreem> {
   bool isOtrosExpanded = false;
   String nombreRecurso = '';
   String urlPDF = '';
-
+  String urlRAR = '';
   @override
   void initState() {
     super.initState();
@@ -39,7 +39,7 @@ class _repositoriosState extends State<repositoriosScreem> {
       Map<String, dynamic> repoData = document.data() as Map<String, dynamic>;
       nombreRecurso = repoData['nombre'];
       urlPDF = repoData['url_PDF'];
-
+      urlRAR = repoData['url_RAR'];
       // Notifica a la interfaz gráfica que los datos han sido actualizados
       setState(() {});
     } catch (e) {
@@ -61,90 +61,7 @@ class _repositoriosState extends State<repositoriosScreem> {
               style: TextStyle(fontSize: 18),
             ),
             const SizedBox(height: 40),
-            GestureDetector(
-              onTap: () {
-                // Aquí manejas la expansión de la sección de Videos
-                setState(() {
-                  isVideosExpanded = !isVideosExpanded;
-                });
-              },
-              child: Container(
-                color: Color.fromARGB(255, 27, 155, 53),
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    Icon(
-                      isVideosExpanded
-                          ? Icons.arrow_drop_up
-                          : Icons.arrow_drop_down,
-                      color: Colors.white,
-                    ),
-                    const SizedBox(width: 10),
-                    const Text(
-                      'Videos',
-                      style: TextStyle(fontSize: 18, color: Colors.white),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            if (isVideosExpanded)
-              Container(
-                padding: const EdgeInsets.all(8.0),
-                color: Colors.grey,
-                child: const Column(
-                  children: [
-                    Text(
-                      'Video 1',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    Text(
-                      'Video 2',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    Text(
-                      'Video 3',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ],
-                ),
-              ),
-            GestureDetector(
-              onTap: () {
-                // Aquí manejas la expansión de la sección de Presentaciones
-                setState(() {
-                  isPresentacionesExpanded = !isPresentacionesExpanded;
-                });
-              },
-              child: Container(
-                color: Color.fromARGB(255, 27, 155, 53),
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    Icon(
-                      isPresentacionesExpanded
-                          ? Icons.arrow_drop_up
-                          : Icons.arrow_drop_down,
-                      color: Colors.white,
-                    ),
-                    SizedBox(width: 10),
-                    Text(
-                      'Presentaciones',
-                      style: TextStyle(fontSize: 18, color: Colors.white),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            if (isPresentacionesExpanded)
-              Container(
-                padding: const EdgeInsets.all(8.0),
-                color: Colors.grey,
-                child: Text(
-                  'Contenido adicional',
-                  style: TextStyle(fontSize: 16),
-                ),
-              ),
+        
             GestureDetector(
               onTap: () {
                 // Aquí manejas la expansión de la sección de PDF
@@ -219,14 +136,24 @@ class _repositoriosState extends State<repositoriosScreem> {
               ),
             ),
             if (isOtrosExpanded)
-              Container(
-                padding: const EdgeInsets.all(8.0),
-                color: Colors.grey,
-                child: Text(
-                  'Contenido adicional',
-                  style: TextStyle(fontSize: 16),
-                ),
-              ),
+             Container(
+    padding: const EdgeInsets.all(8.0),
+    color: Colors.grey,
+    child: GestureDetector(
+      onTap: () async {
+        if (await canLaunch(urlRAR)) {
+          await launch(urlRAR);
+        } else {
+          // Si no se puede abrir la URL, puedes mostrar un mensaje de error
+          print('Error al abrir el RAR');
+        }
+      },
+      child: Text(
+        'Ver RAR',
+        style: TextStyle(fontSize: 16),
+      ),
+    ),
+  ),
           ],
         ),
       ),

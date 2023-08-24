@@ -47,6 +47,7 @@ dependencies:
   flutter_cache_manager: ^3.3.1
   firebase_auth: ^4.7.1
   url_launcher: ^6.1.12
+  firebase_admin: ^0.2.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
