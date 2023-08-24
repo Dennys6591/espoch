@@ -90,7 +90,7 @@ void Subir_PDF(
     print('URL de descarga del archivo RAR: $downloadURLrar');
     // Guardamos la URL en Firestore
     await FirebaseFirestore.instance
-        .collection('archivos')
+        .collection('repositorios')
         .doc(fileName)
         .set({'downloadURL': downloadURLrar});
     print('Archivo RAR subido con éxito.');
