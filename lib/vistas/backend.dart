@@ -19,6 +19,7 @@ TextEditingController _fileNameController = TextEditingController();
 SubirPDF ObjPdf = SubirPDF();
 String urlPdf = '';
 late var downloadURLpdf;
+late var downloadURLrar;
 Uint8List? _pdfBytes;
 var urlPDF = '';
 var _rarBytes;
@@ -50,7 +51,6 @@ Future<void> Escoger_RAR() async {
   }
 }
 
-////// subir rar
 void Subir_PDF(
     TextEditingController nombre_archivo, BuildContext context) async {
   if (_pdfBytes == null) {
@@ -86,7 +86,7 @@ void Subir_PDF(
         FirebaseStorage.instance.ref().child('rars').child(fileName + '.rar');
     await storageRefRAR.putData(_rarBytes!);
     // Obtenemos la URL de descarga del archivo RAR
-    final downloadURLrar = await storageRefRAR.getDownloadURL();
+    downloadURLrar = await storageRefRAR.getDownloadURL();
     print('URL de descarga del archivo RAR: $downloadURLrar');
     // Guardamos la URL en Firestore
     await FirebaseFirestore.instance
@@ -168,7 +168,7 @@ Future<void> guardarNombreRepositorio(String nombreRepositorio,
         await storageRef.putData(imageBytes, metadata);
 
         String downloadURL = await storageRef.getDownloadURL();
-        String downloadURLrar = await storageRef.getDownloadURL();
+
         await newRepoRef.set(
           {
             'urlImagen': downloadURL,
