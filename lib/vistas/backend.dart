@@ -50,7 +50,7 @@ Future<void> Escoger_RAR() async {
     print('El usuario canceló la operación...');
   }
 }
-
+///////////////////////////////
 void Subir_PDF(
     TextEditingController nombre_archivo, BuildContext context) async {
   if (_pdfBytes == null) {
@@ -89,12 +89,6 @@ void Subir_PDF(
     downloadURLrar = await storageRefRAR.getDownloadURL();
     print('URL de descarga del archivo RAR: $downloadURLrar');
     // Guardamos la URL en Firestore
-    await FirebaseFirestore.instance
-        .collection('repositorios')
-        .doc(fileName)
-        .set({'downloadURL': downloadURLrar});
-    print('Archivo RAR subido con éxito.');
-    Navigator.pop(context);
   } catch (e) {
     print('Error al subir el archivo: $e');
   }
