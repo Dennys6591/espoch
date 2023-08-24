@@ -89,6 +89,7 @@ void Subir_PDF(
     downloadURLrar = await storageRefRAR.getDownloadURL();
     print('URL de descarga del archivo RAR: $downloadURLrar');
     // Guardamos la URL en Firestore
+    Navigator.pop(context);
   } catch (e) {
     print('Error al subir el archivo: $e');
   }

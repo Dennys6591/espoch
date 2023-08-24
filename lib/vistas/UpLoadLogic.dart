@@ -11,18 +11,21 @@ class SubirPDF extends StatefulWidget {
 }
 
 class _SubirPDF extends State<SubirPDF> {
- TextEditingController _fileNameController = TextEditingController();
+  TextEditingController _fileNameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Subir recursos'),  backgroundColor:Color.fromARGB(255, 202, 11, 11),),
+      appBar: AppBar(
+        title: Text('Subir recursos'),
+        backgroundColor: Color.fromARGB(255, 202, 11, 11),
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-             ElevatedButton(
-               style: ElevatedButton.styleFrom(
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
                 backgroundColor: Color.fromARGB(255, 202, 11, 11),
               ),
               onPressed: Escoger_RAR,
@@ -30,7 +33,7 @@ class _SubirPDF extends State<SubirPDF> {
             ),
             SizedBox(height: 20),
             ElevatedButton(
-               style: ElevatedButton.styleFrom(
+              style: ElevatedButton.styleFrom(
                 backgroundColor: Color.fromARGB(255, 202, 11, 11),
               ),
               onPressed: Escoger_PDF,
@@ -46,21 +49,17 @@ class _SubirPDF extends State<SubirPDF> {
             ),
             SizedBox(height: 20),
             ElevatedButton(
-               style: ElevatedButton.styleFrom(
+              style: ElevatedButton.styleFrom(
                 backgroundColor: Color.fromARGB(255, 202, 11, 11),
               ),
-  onPressed: () {
-    Subir_PDF(_fileNameController, context);
-  },
-  child: Text('Subir PDF'),
-),
-
-
+              onPressed: () {
+                Subir_PDF(_fileNameController, context);
+              },
+              child: Text('Subir recursos'),
+            ),
           ],
         ),
       ),
     );
   }
-
- 
 }
